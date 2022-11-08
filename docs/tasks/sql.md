@@ -14,7 +14,7 @@ An `sql` task group is defined as follows:
 
 !!! example "project.yaml"
 
-````
+```
 ...
 
     groups:
@@ -26,7 +26,7 @@ An `sql` task group is defined as follows:
           table: "{{ task.name }}"
 
     ...
-    ```
+```
 
 !!! simple example "tasks/base.yaml"
 `yaml task_sql: type: sql file_name: sql_task.sql materialisation: script `
@@ -53,10 +53,10 @@ By default the task is executed in the database defined by `default_db` in `proj
 With `sql` tasks, you should use the `src` and `out` macro in your `SELECT` statements to implicitly create task dependencies.
 
 !!! example "src in sql query"
-` SELECT field1 , field2 FROM {{ src('my_table') }} l `
+`SELECT field1 , field2 FROM {{ src('my_table') }} l`
 
 !!! example "out in sql query"
-` CREATE OR REPLACE {{ out('my_table') }} AS ( SELECT field1 , field2 FROM {{ src('my_other_table') }} l } `
+`CREATE OR REPLACE {{ out('my_table') }} AS ( SELECT field1 , field2 FROM {{ src('my_other_table') }} l }`
 
 By using the `{{ src('my_table') }}` in your `FROM` clause, you are effectively telling SAYN that your task depends on the `my_table` table (or view). As a result, SAYN will look for the task that produces `my_table` and set it as a parent of this `sql` task automatically.
 Similarly, by using `{{ out('table') }}` anywhere in the script you can retrieve the full name of the table to be created. In this way, you also tell SAYN the output of the SQL script.
@@ -72,12 +72,14 @@ When using the `src` macro, you can pass a structure formatted as `schema.table`
 If you need to amend the configuration (e.g. materialisation) of a specific `sql` task within a `group`, you can overload the values specified in the YAML group definition. To do this, we simply call `config` from a Jinja tag within the sql file of the task:
 
 !!! example "sql with config"
-````
+
+```
 
 {{ config(materialisation='view') }}
 
     SELECT ...
-    ```
+
+```
 
 The above code will override the value of `materialisation` setting defined in YAML to make this model a view. All other parameters
 described above in this page are also available to overload with `config` except `file_name` and `name`. Other
@@ -95,7 +97,7 @@ We set an `sql` task as incremental by:
 
 !!! example "sql in incremental mode"
 
-````yaml
+```yaml
 ...
 
     task_sql_incremental:
@@ -108,7 +110,7 @@ We set an `sql` task as incremental by:
         table: task_sql
       delete_key: dt
     ...
-    ```
+```
 
 When using `incremental`, SAYN will do the following in the background:
 
@@ -166,6 +168,7 @@ Each supported database might have specific `table_properties` related to it; se
 If the a primary key is defined in both the `columns` and `indexes` DDL entries, the primary key will be set as part of the `CREATE TABLE` statement only.
 
 !!! example "sql with columns"
+
 ```yaml
 ...
 
@@ -188,5 +191,4 @@ If the a primary key is defined in both the `columns` and `indexes` DDL entries,
         permissions:
           role_name: SELECT
     ...
-    ```
-````
+```
